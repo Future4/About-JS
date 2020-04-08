@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>手写简单版Promise</title>
+</head>
+
+<body>
+  <script>
+    const PENDING = "pending"
+    const RESOLVED = "resolved"
+    const REJECTED = "rejected"
+
+    function MyPromise(fnc) {
+      const _this = this
+      _this.state = PENDING //初始化 state = pending
+      _this.value = null
+      _this.resolveCallbackArr = []
+      _this.rejectCallbackArr = []
+
+      function resolve(value) {
+        if (_this.state == PENDING) {
+          _this.state = RESOLVED
+          _this.value = value
+          _this.resolveCallbackArr.map(cb => cb(_this.value))
+        }
+      }
+
+      function reject(value) {
+        if (_this.state == PENDING) {
+          _this.state = REJECTED
+          _this.value = value
+          _this.rejectCallbackArr.map(cb => cb(_this.value))
+        }
+      }
+
+      try {
+        fnc(resolve, reject)
+      } catch (err) {
+        console.log(err)
+      }
+
+    }
+
+    MyPromise.prototype.then = function (onFulfilled, onRejected) {
+      const _this = this
+      onFulfilled = typeof onFulfilled === 'function' ? onFulfilled : v => v;
+      onRejected = typeof onRejected === 'function' ? onRejected : err => {
+        throw err
+      }
+
+      if(_this.state == PENDING){
+        _this.resolveCallbackArr.push(onFulfilled)
+        _this.rejectCallbackArr.push(onRejected)
+      }
+
+      if(_this.state == RESOLVED){
+        onFulfilled(_this.value)
+      }
+      if(_this.state == REJECTED){
+        onRejected(_this.value)
+      }
+
+    }
+
+
+    new MyPromise((resolve, reject) => {
+      resolve(123)
+    }).then(res => {
+      console.log(res)
+    })
+  </script>
+</body>
+
+</html>
