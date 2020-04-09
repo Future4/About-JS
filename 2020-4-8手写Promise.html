@@ -52,25 +52,67 @@
         throw err
       }
 
-      if(_this.state == PENDING){
-        _this.resolveCallbackArr.push(onFulfilled)
-        _this.rejectCallbackArr.push(onRejected)
+      if (_this.state == PENDING) {
+        return new MyPromise((resolve, reject) => {
+          _this.resolveCallbackArr.push(()=>{
+            let x = onFulfilled(_this.value)
+            if (x instanceof MyPromise) {
+              x.then(resolve, reject)
+            } else {
+              resolve(x)
+            }
+          })
+          _this.rejectCallbackArr.push(()=>{
+            let x = onRejected(_this.value)
+            if (x instanceof MyPromise) {
+              x.then(resolve, reject)
+            } else {
+              resolve(x)
+            }
+          })
+        })
+
       }
 
-      if(_this.state == RESOLVED){
-        onFulfilled(_this.value)
+      if (_this.state == RESOLVED) {
+        return new MyPromise((resolve, reject) => {
+          try {
+            let x = onFulfilled(_this.value)
+            if (x instanceof MyPromise) {
+              x.then(resolve, reject)
+            } else {
+              resolve(x)
+            }
+          } catch (err) {
+            reject(err)
+          }
+        })
+
       }
-      if(_this.state == REJECTED){
-        onRejected(_this.value)
+      if (_this.state == REJECTED) {
+        return new MyPromise((resolve, reject) => {
+          try {
+            let x = onRejected(_this.value)
+            if (x instanceof MyPromise) {
+              x.then(resolve, reject)
+            } else {
+              resolve(x)
+            }
+          } catch (err) {
+            reject(err)
+          }
+        })
       }
 
     }
-
 
     new MyPromise((resolve, reject) => {
       resolve(123)
     }).then(res => {
       console.log(res)
+      return 'abc'
+    }).then(cb =>{
+      console.log(cb)
     })
   </script>
 </body>
