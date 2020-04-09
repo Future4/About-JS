@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>面向对象程序设计思想</title>
+</head>
+
+<body>
+  <script>
+    /*
+     * 首先是一个工厂函数
+     * 优点：减少代码复用，低耦合，避免了创建多个相似对象。
+     * 缺点：无法知道他们是哪个对象的实例
+     */
+    function factoryObject(name, age, job) {
+      var o = new Object();
+      o.name = name;
+      o.age = age;
+      o.job = job;
+      o.move = function () {
+        console.log(this.name + ' at ' + this.age + ' engaged in ' + this.job)
+        return this.name + '  at ' + this.age + ' engaged in ' + this.job
+      }
+      return o
+    }
+    var person1 = factoryObject('张大健', 22, 'web开发')
+    var person2 = factoryObject('张小健', 20, 'python')
+    person1.move()
+    person2.move()
+    console.log(typeof person1)
+    console.log(person1 instanceof Object)
+
+
+    /*
+     *
+     * 构造函数模式
+     * 
+     * new分为四步骤：
+     * 1. 创建一个新对象
+     * 2. 把构造函数的作用域赋给新的对象
+     * 3. 为新对象添加属性
+     * 4. 返回新对象
+     * 
+     * 优点：不仅可以复用，还知道了他们是哪个对象的实例。（用constructor）
+     * 缺点：构造函数中每个方法都会在每个实例上重新创建一边
+     */
+
+    function Person(name, age, job) {
+      this.name = name
+      this.age = age
+      this.job = job
+      this.move = function () {
+        console.log(this.name + ' at ' + this.age + ' engaged in ' + this.job)
+        return this.name + '  at ' + this.age + ' engaged in ' + this.job
+      }
+    }
+
+    var person1 = new Person('张大健', 22, 'web开发')
+    var person2 = new Person('张小健', 20, 'python')
+    console.log(person1.constructor == Person)
+    console.log(person2.constructor == Person)
+    console.log(person2.constructor == Object)
+
+
+    /*
+     * 原型模式
+     * 
+     * 为了解决构造函数中每个实例的方法重新创建的问题，所以推出了原型模式
+     * 
+     * 优点：避免每个实例都重新创建方法，因为每个实例的方法是共享的
+     * 缺点:虽然共享了，但是引用类型的属性会出问题，修改了其中一个实例，其他的实例都会修改
+     * 
+     */
+
+    function Person_proto() {}
+    Person_proto.prototype = {
+      constructor: Person_proto,
+      name: '张大健',
+      age: 22,
+      job: 'web前端',
+      friends: ['lishuang', 'wangjunl', 'guxuepo'],
+      move: function () {
+        console.log(this.name + ' at ' + this.age + ' engaged in ' + this.job)
+        return this.name + '  at ' + this.age + ' engaged in ' + this.job
+      }
+    }
+    var person1 = new Person_proto()
+    var person2 = new Person_proto()
+    person2.name = '张小建'
+
+
+    /*
+     * 组合构造函数和原型模式
+     * 
+     * 踩了那么多坑，终于有个完全方案了,是目前用的最广泛的、认同度最高的创建自定义类型的方法。
+     * 
+     */
+    function PersonAll(name, age, job) {
+      this.name = name
+      this.age = age
+      this.job = job
+      this.friends = ['lishuang', 'wangjunl', 'guxuepo']
+    }
+    PersonAll.prototype = {
+      constructor: PersonAll,
+      move: function () {
+        console.log(this.name + ' at ' + this.age + ' engaged in ' + this.job)
+        return this.name + '  at ' + this.age + ' engaged in ' + this.job
+      }
+    }
+    var person1 = new PersonAll('张大建', 22, 'web前端')
+    var person2 = new PersonAll('张小建', 18, 'java')
+    person2.name = '张xiaoxiao建'
+    console.log(person1, person2)
+
+
+
+    /*
+     *
+     * 组合继承
+     * 
+     * 缺点：会调用两次超类性构造函数，导致原型中有两个同名属性
+     */
+    // 超类
+    function SuperType(name) {
+      this.name = name;
+      this.friends = ['wangjunl', 'lis', 'guxp']
+    }
+    SuperType.prototype.sayName = function () {
+      console.log(this.name)
+      return this.name
+    }
+    // 子类
+    function ChildType(name, age) {
+      // 继承了属性
+      SuperType.call(this, name)
+      this.age = age
+    }
+
+    // 继承了方法
+    ChildType.prototype = new SuperType()
+
+    ChildType.prototype.sayAge = function () {
+      console.log(this.age)
+      return this.age
+    }
+
+    var test1 = new ChildType('张大建', 22)
+    var test2 = new ChildType('张小建', 18)
+    console.log(test1, test2)
+
+
+
+
+    /*
+     *寄生组合继承
+     *优点：完美解决了组合继承的不足
+     */
+    function inheritPrototype(ssuper, cchild) {
+      var prototype = Object(ssuper.prototype)
+      prototype.constructor = cchild
+      cchild.prototype = prototype
+    }
+
+    function Ssuper(name) {
+      this.name = name
+      this.colors = ['red', 'green', 'yellow']
+    }
+    Ssuper.prototype.sayName = function () {
+      return this.name
+    }
+
+    function Cchild(age) {
+      Ssuper.call(this, name)
+      this.age = age
+    }
+    inheritPrototype(Ssuper, Cchild)
+    Cchild.prototype.sayAge = function () {
+      return this.age
+    }
+    var person1 = new Cchild('zhangjian', 22)
+    var person2 = new Cchild('lishuang', 21)
+    person1.colors.push('songbolun')
+    console.log(person1, person2)
+  </script>
+</body>
+
+</html>
