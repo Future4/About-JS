@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>微任务宏任务</title>
+</head>
+
+<body>
+  <script>
+    /*
+     *
+     * 其实在每个宏任务后，引擎会立即执行微任务队列中的微任务，本着 "先进先出" 的原则.执行完微任务后，才执行下一个宏任务，或者渲染，或者其他任何操作。
+     * 
+     * 接下来我们比较一下 setTimeout setInterval Promise  async await 的执行顺序吧～
+     * 
+     */
+
+    /*
+     * 下方注释为第一段的结果
+     * 
+     * script start 1
+     * Promise 1
+     * Promise 2
+     * setTimeout 1
+     * Promise 3
+     * Promise 4
+     * setInterval
+     * setTimeout 2
+     * Promise 5 
+     * Promise 6
+     * 
+     */
+    console.log('script start 1')
+    var inter = null
+    setTimeout(() => {
+      console.log('setTimeout 1')
+      Promise.resolve().then(() => {
+        console.log('Promise 3')
+      }).then(() => {
+        console.log('Promise 4')
+      }).then(() => {
+        setTimeout(() => {
+          console.log('setTimeout 2')
+          Promise.resolve().then(() => {
+            console.log('Promise 5')
+          }).then(() => {
+            console.log('Promise 6')
+          }).then(() => {
+            clearInterval(inter)
+          })
+        }, 0)
+      })
+    }, 0)
+    inter = setInterval(() => {
+      console.log('setInterval')
+    }, 0)
+
+    Promise.resolve().then(() => {
+      console.log('Promise 1')
+    }).then(() => {
+      console.log('Promise 2')
+    })
+
+
+
+
+    /*
+     *
+     * 下方注释为第二部分的结果
+     * 
+     * script start 2
+     * async1 start
+     * async2
+     * promise1
+     * script end
+     * async3-------------
+     * promise2
+     * async1 end
+     * setTimeout
+     * 
+     * */
+
+    async function async1() {
+      console.log('async1 start');
+      await async2();
+      await async3();
+      console.log('async1 end')
+    }
+    async function async2() {
+      console.log('async2')
+    }
+    async function async3() {
+      console.log('async3-------------')
+    }
+
+    console.log('script start 2');
+    setTimeout(function () {
+      console.log('setTimeout')
+    }, 0);
+    async1();
+    new Promise(function (resolve) {
+      console.log('promise1');
+      resolve();
+    }).then(function () {
+      console.log('promise2')
+    });
+    console.log('script end')
+
+
+
+    /*
+     *
+     * 下方注释为全部的结果
+     * 
+     *
+     * */
+    // script start 1
+    // script start 2
+    // async1 start
+    // async2
+    // promise1
+    // script end
+    // Promise 1
+    // async3-------------
+    // promise2
+    // Promise 2
+    // async1 end
+    // setTimeout 1
+    // Promise 3
+    // Promise 4
+    // setInterval
+    // setTimeout
+    // setTimeout 2
+    // Promise 5
+    // Promise 6
+  </script>
+</body>
+
+</html>
