@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Fetch</title>
+</head>
+
+<body>
+  <script>
+    /*
+     *
+     * fetch() 方法是一种现代通用的方法，它返回的是一个Promise对象，所以我们可以用 async await 来使用它
+     * 
+     */
+
+    async function request() {
+      // response 返回的是一个 promise
+      let response = await fetch(url, option) //参数一：url，参数二：是一个对象，里面包含一些属性，比如：method,headers,body  
+      let result = await response.json() //将 body 读取为 json
+      let result2 = await response.text() //将 body 读取为 json  此方法将没有效果，因为只能获取一次响应体，上面代码已经获取过一次了
+
+    }
+
+    //或者 以Promise的形式调用
+    fetch().then(response => response.json()).then(result => {
+      console.log(result)
+    })
+    /*
+     * 响应的属性：
+     *
+     * response.status—— response 的 HTTP 状态码，
+     * response.ok—— HTTP 状态码为 200 - 299， 则为 true。
+     * response.headers—— 类似于 Map 的带有 HTTP header 的对象。
+     *
+     *
+     *
+     * 获取 response body 的方法：
+     *
+     * response.text() —— 读取 response，并以文本形式返回 response，
+     * response.json() —— 将 response 解析为 JSON 对象形式，
+     * response.formData() —— 以 FormData 对象（form/multipart 编码，参见下一章）的形式返回 response，
+     * response.blob() —— 以 Blob（具有类型的二进制数据）形式返回 response，
+     * response.arrayBuffer() —— 以 ArrayBuffer（低级别的二进制数据）形式返回 response。
+     */
+
+
+
+    /*
+     *如果提供了 HTML form 元素，以下代码会自动捕获 form 元素字段。
+     */
+
+    let formData = new FormData([form]);
+
+    /*
+    * 我们可以从 HTML 表单创建 new FormData(form)， 也可以创建一个完全没有表单的对象， 然后使用以下方法附加字段：
+
+    * formData.append(name, value)
+    * formData.append(name, blob, fileName)
+    * formData.set(name, value)
+    * formData.set(name, blob, fileName)
+    * 
+    * 
+    * 让我们在这里注意两个特点：
+    * set 方法会移除具有相同名称（ name） 的字段， 而 append 不会。
+    * 要发送文件， 需要使用三个参数的语法， 最后一个参数是文件名， 一般是通过 < input type = "file" > 从用户文件系统中获取的。
+    * 
+    * 
+    * 其他方法是：
+    * formData.delete(name)
+    * formData.get(name)
+    * formData.has(name)
+    */
+
+
+
+    /*
+     *promise没有终止的概念，但是fetch有 Abort
+     * 
+     */
+
+    let controller = new AbortController()
+
+    controller.abort() //终止请求
+
+    let signal = controller.signal;
+    alert(signal.aborted) //如果终止了 就是true  没终止就是false
+
+
+    // 例子
+    async function abc() {
+      let controller = new AbortController()
+      let signal = controller.signal
+      setTimeout(() => controller.abort(), 10000);
+
+      try {
+        let response = await fetch('http://10.0.3.52:8094/SalesDailyService.svc/GetProductLineInfo', {
+
+          signal: controller.signal
+        })
+
+        console.log(await response.json())
+      } catch (err) {
+        console.log(err)
+      }
+    }
+
+
+    /*
+     *一个新 URL 对象的语法
+     *
+     * @parmas {string} url 路径
+     * @parmas  base 可选的 base URL：如果设置了此参数，且参数 url 只有路径，则会根据这个 base 生成 URL。
+     */
+    new URL(url, [base])
+
+    let url1 = new URL('https://javascript.info/profile/admin');
+    let url2 = new URL('/profile/admin', 'https://javascript.info');
+    alert(url1); // https://javascript.info/profile/admin
+    alert(url2); // https://javascript.info/profile/admin
+
+
+    let url = new URL('https://javascript.info/profile/admin');
+    let newUrl = new URL('tester', url);
+    alert(newUrl); // https://javascript.info/profile/tester
+
+
+    /*
+     *
+     *  append(name, value) —— 按照 name 添加参数，
+     *  delete(name) —— 按照 name 移除参数，
+     *  get(name) —— 按照 name 获取参数，
+     *  getAll(name) —— 获取相同 name 的所有参数（这是可行的，例如 ?user=John&user=Pete），
+     *  has(name) —— 按照 name 检查参数是否存在，
+     *  set(name, value) —— set/replace 参数，
+     *  sort() —— 按 name 对参数进行排序，很少使用，
+     * */
+
+    url.searchParams.set('s', 'hello')
+
+
+    //encodeURIComponent 和 encodeURI 区别 ：encodeURIComponent的编码范围更广一点，更严格一点，用于参数。encodeURI：仅编码 URL 中完全禁止的字符，可用于整个url
+
+
+
+    /*
+     *  XMLHttpRequest
+     */
+    let xhr = new XMLHttpRequest()
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState == 4) {
+        try {
+          if ((xhr.status >= 200 && xhr.status < 300) || xhr.status == 304) {
+            console.log(xhr.responseText)
+            // document.write(xhr.responseText)
+          } else {
+            throw ('no success:' + xhr.status)
+          }
+        } catch (err) {
+          console.log(err)
+        }
+      }
+    }
+    // xhr.setRequestHeader('MyHeader','MyValue') 设置了之后 不会删除也不会替换，只会新增
+    xhr.timeout = 50
+    xhr.ontimeout = function () {
+      alert('请求超时')
+    }
+    xhr.open("POST", url,true)
+    xhr.send(body)
+    // xhr.send(null) get 方式
+
+
+
+    // //onload或者onreadystatechange都可以
+    // xhr.onload = function () {
+    //   if (xhr.status != 200) { // HTTP error?
+    //     // 处理 error
+    //     alert('Error: ' + xhr.status);
+    //     return;
+    //   }
+    //   // 获取来自 xhr.response 的响应
+    // };
+    // 可以报告实时进度
+    xhr.onprogress = function (event) {
+      if (event.lengthComputable) {
+        alert(`Received ${event.loaded} of ${event.total} bytes`);
+      } else {
+        alert(`Received ${event.loaded} bytes`); // 没有 Content-Length
+      }
+    };
+  </script>
+</body>
+
+</html>
