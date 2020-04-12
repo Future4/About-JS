@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>箭头函数与普通函数的区别</title>
+</head>
+
+<body>
+    <script>
+        /*
+         * 箭头函数与普通函数的区别
+         */
+
+        // 普通函数
+        function func(a, b, c) {
+
+        }
+        func(1, 3, 8)
+
+        // 箭头函数
+        var fnc2 = () => {
+            console.log('我是箭头函数')
+        }
+
+        /*
+         *
+         * 1.普通函数有自己的this 箭头函数捕获上下文作为自己的this
+         * 2.普通函数有arguments 箭头函数没有，箭头函数用rest参数...解决
+         * 3.箭头函数无法使用 new 操作符
+         * 4.箭头函数没有原型属性
+         * 5.箭头函数不能当做Generator函数,不能使用yield关键字
+         * 
+         */
+        /**********************1.普通函数有自己的this 箭头函数捕获上下文作为自己的this******************************/
+        var myObject = {
+            value: 1,
+            getValue: function () {
+                console.log(this.value)
+            },
+            double: function () {
+                return function () { //this指向double函数内不存在的value
+                    console.log(this.value = this.value * 2);
+                }
+            }
+        }
+        /*希望value乘以2*/
+        myObject.double()(); //NaN
+        myObject.getValue(); //1
+
+        var myObject = {
+            value: 1,
+            getValue: function () {
+                console.log(this.value)
+            },
+            double: function () {
+                return () => {
+                    console.log(this.value = this.value * 2);
+                }
+            }
+        }
+        /*希望value乘以2*/
+        myObject.double()(); //2
+        myObject.getValue(); //2
+
+
+        /**********************2.普通函数有arguments 箭头函数没有，箭头函数用rest参数...解决******************************/
+
+        /*常规函数使用arguments*/
+        function test1(a) {
+            console.log(arguments); //1
+        }
+        /*箭头函数不能使用arguments*/
+        var test2 = (a) => {
+            console.log(arguments)
+        } //ReferenceError: arguments is not defined
+        /*箭头函数使用reset参数...解决*/
+        let test3 = (...a) => {
+            console.log(a[1])
+        } //22
+
+        test1(1);
+        test2(2);
+        test3(33, 22, 44);
+
+
+
+        /**********************3.箭头函数无法使用 new 操作符******************************/
+        var B = () => {
+            value: 1;
+        }
+        var b = new B(); //TypeError: B is not a constructor
+
+
+
+
+        /**********************4.箭头函数没有原型属性******************************/
+        var a = () => {
+            return 1;
+        }
+
+        function b() {
+            return 2;
+        }
+        console.log(a.prototype); //undefined
+        console.log(b.prototype); //object{...}
+    </script>
+</body>
+
+</html>
