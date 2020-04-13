@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Object.defineProperty</title>
+</head>
+
+<body>
+  <script>
+    let user = {
+      name: "zhangjian"
+    }
+
+    var descriptor = Object.getOwnPropertyDescriptor(user, 'name')
+    console.log(descriptor)
+    // value: "zhangjian"
+    // writable: true
+    // enumerable: true
+    // configurable: true
+
+    // 使用 Object.defineProperty可以修改属性标志和属性描述符
+    Object.defineProperty(user, 'name', {
+      value: 'haha'
+    })
+    console.log(user)
+
+
+
+
+
+
+    /*
+     *
+     * Getter 和 Setter
+     * 
+     */
+
+    var obj = {
+      firstName: 'zhang',
+      lastName: 'jian',
+      get fullName() {
+        return this.firstName + " " + this.lastName
+      },
+      set fullName(value) {
+        [this.firstName, this.lastName] = value.split(" ")
+      }
+    }
+
+
+
+    // 使用 Object.defineProperty
+    let user = {
+      name: "John",
+      surname: "Smith"
+    };
+
+    Object.defineProperty(user, 'fullName', {
+      get() {
+        return `${this.name} ${this.surname}`;
+      },
+
+      set(value) {
+        [this.name, this.surname] = value.split(" ");
+      }
+    });
+
+    // 一个属性要么具有get/set方法，要么是数据属性（具有value），不可以两者都有
+
+    // Error: Invalid property descriptor.
+    Object.defineProperty({}, 'prop', {
+      get() {
+        return 1
+      },
+
+      value: 2
+    });
+
+
+
+
+
+    // 给user添加了age属性
+    function User(name, birthday) {
+      this.name = name;
+      this.birthday = birthday;
+
+      Object.defineProperty(this, 'age', {
+        get() {
+          return new Date().getFullYear() - this.birthday.getFullYear()
+        }
+      })
+
+    }
+    let john = new User("John", new Date(1992, 6, 1));
+  </script>
+</body>
+
+</html>
