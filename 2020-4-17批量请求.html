@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 尝试写一个 可批量请求数据的函数，所有url地址在urls参数中，有最大并发数，所有请求结束后，返回一个callback
+    /*
+     *
+     * 思路：如果最大并发数为4的话，首先同时加载4个请求，在返回一个结果的同时，往队列再添加一个请求，如此循环，直到所有请求完毕
+     * 
+     * */
+    let urls = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    sendRequest(urls, 4, function () {
+      console.log('---all request end---')
+    })
+
+    function sendRequest(urls, max, callback) {
+      const total = urls.length //urls中全部的个数
+      let count = 0 //请求完成了几次
+
+      const handler = () => {
+        if (urls.length) {
+          const timeout = parseInt(Math.random() * 10000)
+          new Promise((reslove, reject) => {
+            //每次取urls中第一个url
+            const url = urls.shift()
+            console.log('----请求开始', url)
+            setTimeout(() => {
+              reslove(url)
+            }, timeout)
+          }).then(r => {
+            console.log('请求结束---', r)
+            count++ //每次请求结束后，请求完成++
+            handler() //递归 冲洗请求函数，添加到请求列表中
+          })
+        }
+        if (count >= total) {
+          callback() //如果请求完成的个数 >= 全部的个数 那么就callback
+        }
+      }
+
+      for (let i = 0; i < max; i++) {
+        handler() //将max次请求添加进去
+      }
+    }
+  </script>
+</body>
+
+</html>
