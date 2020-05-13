@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>9.防抖与节流.html</title>
+  <script src="https://kendo.cdn.telerik.com/2019.2.619/js/jquery.min.js"></script>
+
+</head>
+
+<body>
+  <button id="add">++++++</button>
+  <span id="test"></span>
+  <script>
+    // 1.函数防抖
+
+    function debounce(func, await) {
+      let timer
+      return function () {
+        let context = this
+        let args = arguments
+
+        if (timer) clearTimeout(timer)
+
+        timer = setTimeout(() => {
+          func.apply(context, args)
+        }, await)
+      }
+    }
+    let num = 0
+
+    function count() {
+      $('#test').html(++num)
+    }
+
+    $('#add').click('on', debounce(count, 1000))
+  </script>
+</body>
+
+</html>
