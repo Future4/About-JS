@@ -191,6 +191,13 @@
         alert(`Received ${event.loaded} bytes`); // 没有 Content-Length
       }
     };
+
+
+
+   //fetch和ajax的区别：1.当请求为404或者500的时候，ajax会返回报错，而fetch会正常返回，只不过ok里面是false
+   //fetch和ajax的区别：2.默认情况下，fetch在服务端不会接受或发送cookie，如果想发送，必须发送凭据头credentials：‘same-origin’,对于CORS请求，发送
+   //credentials：‘include’
+
   </script>
 </body>
 
