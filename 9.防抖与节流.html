@@ -16,17 +16,40 @@
   <script>
     // 1.函数防抖
 
+    // function debounce(func, await) {
+    //   let timer
+    //   return function () {
+    //     let context = this
+    //     let args = arguments
+
+    //     if (timer) clearTimeout(timer)
+
+    //     timer = setTimeout(() => {
+    //       func.apply(context, args)
+    //     }, await)
+    //   }
+    // }
+
+    // 立即执行版本
     function debounce(func, await) {
       let timer
       return function () {
-        let context = this
+        let _this = this
         let args = arguments
 
-        if (timer) clearTimeout(timer)
+        if (timer) {
+          clearTimeout(timer)
+        }
+
+        let callNow = !timer
 
         timer = setTimeout(() => {
-          func.apply(context, args)
+          timer = null
         }, await)
+
+        if (callNow) {
+          func.apply(_this, args)
+        }
       }
     }
     let num = 0
