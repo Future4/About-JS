@@ -2,64 +2,180 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>9.防抖与节流.html</title>
-  <script src="https://kendo.cdn.telerik.com/2019.2.619/js/jquery.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>9.防抖与节流.html</title>
+    <script src="https://kendo.cdn.telerik.com/2019.2.619/js/jquery.min.js"></script>
 
 </head>
 
 <body>
-  <button id="add">++++++</button>
-  <span id="test"></span>
-  <script>
-    // 1.函数防抖
+    <button id="add">++++++</button>
+    <span id="test"></span>
+    <p>防抖</p>
+    <div id="content1"
+        style="height:150px;line-height:150px;text-align:center; color: #fff;background-color:#ccc;font-size:80px;">
+    </div>
+    <p>节流</p>
+    <div id="content2"
+        style="height:150px;line-height:150px;text-align:center; color: #fff;background-color:#ccc;font-size:80px;">
+    </div>
+    <script>
+        // 1.函数防抖
 
-    // function debounce(func, await) {
-    //   let timer
-    //   return function () {
-    //     let context = this
-    //     let args = arguments
+        // function debounce(func, wait) { 
+        //   let timer
+        //   return function () {
+        //     let context = this
+        //     let args = arguments
 
-    //     if (timer) clearTimeout(timer)
+        //     if (timer) clearTimeout(timer)
 
-    //     timer = setTimeout(() => {
-    //       func.apply(context, args)
-    //     }, await)
-    //   }
-    // }
+        //     timer = setTimeout(() => {
+        //       func.apply(context, args)
+        //     }, wait)
+        //   }
+        // }
 
-    // 立即执行版本
-    function debounce(func, await) {
-      let timer
-      return function () {
-        let _this = this
-        let args = arguments
+        // 立即执行版本
+        // function debounce(func, wait) {
+        //     let timer
+        //     return function () {
+        //         let _this = this
+        //         let args = arguments
 
-        if (timer) {
-          clearTimeout(timer)
+        //         if (timer) {
+        //             clearTimeout(timer)
+        //         }
+
+        //         let callNow = !timer
+
+        //         timer = setTimeout(() => {
+        //             timer = null
+        //         }, wait)
+
+        //         if (callNow) {
+        //             func.apply(_this, args)
+        //         }
+        //     }
+        // }
+
+        /**
+         * @desc 函数防抖
+         * @param func 函数
+         * @param wait 延迟执行毫秒数
+         * @param immediate true 表立即执行，false 表非立即执行
+         */
+        // 防抖结合版本
+        function debounce(func, wait, immediate) {
+            let timer
+            return function () {
+                let context = this
+                let args = arguments
+
+                if (timer) clearTimeout(timer)
+                if (immediate) {
+                    var callNow = !timer
+
+                    timer = setTimeout(() => {
+                        timer = null
+                    }, wait)
+
+                    if (callNow) func.apply(context, args)
+                } else {
+                    timer = setTimeout(() => {
+                        func.apply(context, args)
+                    }, wait)
+                }
+            }
         }
 
-        let callNow = !timer
 
-        timer = setTimeout(() => {
-          timer = null
-        }, await)
 
-        if (callNow) {
-          func.apply(_this, args)
+        // 节流  立即执行
+        // function throttle(func, wait) {
+        //     let previous = 0;
+        //     return function () {
+        //         let now = Date.now();
+        //         let context = this;
+        //         let args = arguments;
+        //         // 现在的时间 - 以前的时间 是否大于 0
+        //         if (now - previous > wait) {
+        //             console.log(now)
+
+        //             func.apply(context, args);
+        //             // 现在的时间 赋值给 以前的时间
+        //             previous = now;
+        //         }
+        //     }
+        // }
+
+        // // 节流  稍后执行
+        // function throttle(func, wait) {
+        //     let timer
+        //     return function () {
+        //         let context = this;
+        //         let args = arguments;
+        //         if (!timer) {
+        //             timer = setTimeout(() => {
+        //                 func.apply(context, args)
+        //                 timer = null
+        //             }, wait)
+        //         }
+
+        //     }
+        // }
+
+
+        /**
+         * @desc 函数节流
+         * @param func 函数
+         * @param wait 延迟执行毫秒数
+         * @param type 1 表时间戳版，2 表定时器版
+         */
+        function throttle(func, wait, type) {
+            if (type == 1) {
+                var previous = 0
+            } else if (type == 2) {
+                var timer
+            }
+            return function () {
+                let context = this;
+                let args = arguments;
+                if (type == 1) {
+                    let now = Date.now()
+
+                    if (now - previous > wait) {
+                        func.apply(context, args)
+                        previous = now
+                    }
+                } else if (type == 2) {
+                    if (!timer) {
+                        timer = setTimeout(() => {
+                            func.apply(context, args)
+                            timer = null
+                        }, wait)
+                    }
+                }
+            }
         }
-      }
-    }
-    let num = 0
 
-    function count() {
-      $('#test').html(++num)
-    }
+        let num1 = 1
+        let num2 = 1
 
-    $('#add').click('on', debounce(count, 1000))
-  </script>
+        function count1() {
+            $('#content1').html(num1++)
+        }
+
+        function count2() {
+            $('#content2').html(num2++)
+        }
+
+        $('#content1').mousemove('on', debounce(count1, 1000, true))
+        $('#content2').mousemove('on', throttle(count2, 1000, 2))
+        // $('#content').mousemove('on', count)
+    </script>
 </body>
 
 </html>
