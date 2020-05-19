@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>js实现路由</title>
+</head>
+
+<body>
+    <ul>
+        <li><a href="#/">首页</a></li>
+        <li><a href="#/product">产品</a></li>
+        <li><a href="#/server">服务</a></li>
+    </ul>
+    <div id="result"></div>
+    <script>
+        function Router() {
+            this.routes = {};
+            this.curUrl = '';
+
+            this.route = function (path, callback) {
+                this.routes[path] = callback || function () {};
+            };
+
+            this.refresh = function () {
+                this.curUrl = location.hash.slice(1) || '/';
+                this.routes[this.curUrl]();
+            };
+
+            this.init = function () {
+                window.addEventListener('load', this.refresh.bind(this), false);
+                window.addEventListener('hashchange', this.refresh.bind(this), false);
+            }
+        }
+
+        var R = new Router();
+        R.init();
+        var res = document.getElementById('result');
+
+        R.route('/', function () {
+            res.style.background = 'blue';
+            res.innerHTML = '这是首页';
+        });
+        R.route('/product', function () {
+            res.style.background = 'orange';
+            res.innerHTML = '这是产品页';
+        });
+        R.route('/server', function () {
+            res.style.background = 'black';
+            res.innerHTML = '这是服务页';
+        });
+    </script>
+</body>
+
+</html>
