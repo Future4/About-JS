@@ -2,56 +2,59 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>js实现路由</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
 </head>
 
 <body>
-    <ul>
-        <li><a href="#/">首页</a></li>
-        <li><a href="#/product">产品</a></li>
-        <li><a href="#/server">服务</a></li>
-    </ul>
-    <div id="result"></div>
-    <script>
-        function Router() {
-            this.routes = {};
-            this.curUrl = '';
+  <ul>
+    <li><a href="#/1">Index1页面</a></li>
+    <li><a href="#/2">Index2页面</a></li>
+    <li><a href="#/3">Index3页面</a></li>
+  </ul>
 
-            this.route = function (path, callback) {
-                this.routes[path] = callback || function () {};
-            };
+  <div id="router_view"></div>
+  <script>
+    function Router() {
+      this.routes = {}
+      this.curUrl = ''
 
-            this.refresh = function () {
-                this.curUrl = location.hash.slice(1) || '/';
-                this.routes[this.curUrl]();
-            };
+      this.route = function (path, callback) {
+        this.routes[path] = callback || function () {}
+      }
 
-            this.init = function () {
-                window.addEventListener('load', this.refresh.bind(this), false);
-                window.addEventListener('hashchange', this.refresh.bind(this), false);
-            }
-        }
 
-        var R = new Router();
-        R.init();
-        var res = document.getElementById('result');
+      this.refresh = function () {
+        this.curUrl = location.hash.slice(1)
+        console.log(this.curUrl, this.routes[this.curUrl])
+        this.routes[this.curUrl]()
+      }
 
-        R.route('/', function () {
-            res.style.background = 'blue';
-            res.innerHTML = '这是首页';
-        });
-        R.route('/product', function () {
-            res.style.background = 'orange';
-            res.innerHTML = '这是产品页';
-        });
-        R.route('/server', function () {
-            res.style.background = 'black';
-            res.innerHTML = '这是服务页';
-        });
-    </script>
+
+
+      this.init = function () {
+        window.addEventListener('load', this.refresh.bind(this))
+        window.addEventListener('hashchange', this.refresh.bind(this))
+      }
+    }
+
+    var router = new Router()
+    router.init()
+    var dom = document.getElementById('router_view')
+
+
+    router.route('/1',function(){
+      dom.innerHTML = 'Index1页面'
+    })
+    router.route('/2',function(){
+      dom.innerHTML = 'Index2页面'
+    })
+    router.route('/3',function(){
+      dom.innerHTML = 'Index3页面'
+    })
+  </script>
 </body>
 
 </html>
