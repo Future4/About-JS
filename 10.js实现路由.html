@@ -27,7 +27,7 @@
 
 
       this.refresh = function () {
-        this.curUrl = location.hash.slice(1)
+        this.curUrl = location.hash.slice(1) || '/'
         console.log(this.curUrl, this.routes[this.curUrl])
         this.routes[this.curUrl]()
       }
