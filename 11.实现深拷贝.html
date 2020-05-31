@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>11.实现深拷贝.html</title>
+</head>
+
+<body>
+    <script>
+        // 1. JSON.parse(JSON.stringify(obj))
+
+        // 但是这个方式有个缺点，如果obj里面有null、函数、Obj对象原型链上的属性和方法的时候，无法被拷贝下来
+
+
+
+
+        // 2. 
+        function deepClone(obj) {
+            if (!(typeof obj == 'object' && obj !== null)) return obj
+
+            var target = Array.isArray(obj) ? [] : {}
+
+            for (var k in obj) {
+                if (obj.hasOwnProperty(k)) {
+                    if (typeof obj[k] == 'object') {
+                        target[k] = deepClone(obj[k])
+                    } else {
+                        target[k] = obj[k]
+                    }
+                }
+            }
+
+
+        }
+
+
+
+        3.
+
+        function deepCopy(obj) {
+            var copy = Object.create(Object.getPrototypeOf(obj));
+            var propNames = Object.getOwnPropertyNames(obj);
+
+            propNames.forEach(function (name) {
+                var desc = Object.getOwnPropertyDescriptor(obj, name);
+                Object.defineProperty(copy, name, desc);
+            });
+
+            return copy;
+        }
+
+        var obj1 = {
+            a: 1,
+            b: {
+                bc: 50,
+                dc: 100,
+                be: {
+                    bea: 1
+                }
+            }
+        };
+        var obj2 = deepCopy(obj1);
+        console.log(obj2)
+        obj1.a = 20;
+        console.log(obj1)
+        console.log(obj2)
+    </script>
+</body>
+
+</html>
