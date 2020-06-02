@@ -135,12 +135,12 @@
     }
     // 子类
     function ChildType(name, age) {
-      // 继承了属性
+      // 继承了属性 用于构造继承缺点是不能继承 原型属性和方法
       SuperType.call(this, name)
       this.age = age
     }
 
-    // 继承了方法
+    // 继承了方法  用于原型链继承 缺点是无法传参，无法实现多继承
     ChildType.prototype = new SuperType()
 
     ChildType.prototype.sayAge = function () {
