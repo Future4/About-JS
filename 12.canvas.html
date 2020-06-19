@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  <canvas id="canvas" width="2000" height="2000">A draw of someing</canvas>
+  <script>
+    var drawing = document.getElementById("canvas")
+    if (drawing.getContext) {
+      var context = drawing.getContext('2d')
+      // 矩形 
+      // context.fillStyle = "#f00"
+      // 参数（x,y,width,height）
+      // context.fillRect(10, 10, 50, 50)
+      // context.fillStyle = "#0f0"
+      // context.fillRect(30, 30, 50, 50)
+
+
+      // // 矩形的边框
+      // context.strokeStyle = "#f00"
+      // context.strokeRect(10, 10, 50, 50)
+      // context.strokeStyle = "rgba(0,255,0,0.5)"
+      // context.strokeRect(30, 30, 50, 50)
+      // context.clearRect(50,50,50,50)
+
+      /*
+       *
+       * 绘制路径
+       * 
+       * params x 
+       * params y 
+       * params radius  半径
+       * params startAngle  开始角度
+       * params endAngle  结束角度
+       * params counterclockwise  是否顺时针
+       * 
+       * arc(x,y,radius,startAngle,endAngle,counterclockwise)
+       * 
+       * 
+       * 
+       * arcto(x1,y1,x2,y2,radius):从上一个点开始绘制弧线，到达x2，y2，并且以给定的半径穿过x1,y1
+       * 
+       * 
+       * 
+       * 
+       * bezierCurveTo(c1x,c1y,c2x,c2y,x,y) 从上一点开始绘制，到xy点 （c1x,c1y） （c2x,c2y）是控制点
+       * 
+       * 
+       * lineTo(x,y) 从上一点开始绘制一条直线到xy为止
+       * 
+       * moveTo(x,y) 将绘图游标移动到xy 不画线
+       * 
+       * quadraticCurveTo(cx,cy,x,y) 从上一点绘制一条二次曲线到xy，cx,cy为控制点
+       * 
+       * rect(x,y,width,height)
+       * 
+       * 
+       * closePath()连接到路径起点
+       * 
+       * fill()填充
+       * 
+       * stroke路径描边
+       * 
+       * clip()在路径上创建一个剪切区域
+       * 
+       */
+
+
+      // 绘制时钟表盘
+
+      // context.beginPath()
+
+      // context.arc(100, 100, 99, 0, 2 * Math.PI, false)
+      // context.moveTo(194, 100)
+      // context.arc(100, 100, 94, 0, 2 * Math.PI, false)
+
+
+      // context.translate(100,100)//原点定为100，100
+
+      // context.rotate(1)
+      // context.moveTo(0, 0)
+      // context.lineTo(0, -85)
+
+      // context.moveTo(0, 0)
+      // context.lineTo(-65, 0)
+
+
+      // context.textAlign = "center"
+      // context.textBaseLine = "middle"
+      // context.fillText("12", 0, -85)
+
+      // context.stroke()
+
+
+
+
+      // save 保存
+
+      context.fillStyle = "#F00"
+      context.save()
+
+      context.fillStyle = "#0F0"
+      context.translate(100, 100)
+      context.save()
+
+
+      context.fillStyle = "#00F"
+      context.fillRect(0, 0, 100, 200)
+
+      context.restore()
+      context.fillRect(10, 10, 100, 200)
+
+      context.restore()
+      context.fillRect(0, 0, 100, 200)
+
+      context.stroke()
+    }
+  </script>
+</body>
+
+</html>
