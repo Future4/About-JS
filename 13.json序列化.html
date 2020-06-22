@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    var book = {
+      "title": "book1",
+      "array": [1, 2, 3, 4],
+      edition: 3,
+      year: 2012,
+      // toJSON:function(){
+      //   return this.array
+      // }只返回含有toJSON方法里面的值
+    }
+    console.log(JSON.stringify(book))
+    JSON.stringify(book, ["title", "year"]) //{"title":"book1","year":2012}
+
+
+
+    var a = JSON.stringify(book, function (key, value) {
+      switch (key) {
+        case "title":
+          return "book2"
+        case "array":
+          return value.join(',')
+        case "year":
+          return 2020
+        default:
+          return value
+      }
+    })
+    console.log(a) //第二个参数可以作为控制json的函数
+
+
+    var a = JSON.stringify(book, null, '--')
+    console.log(a) // 第三个参数  字符串的缩进  （最大缩进行数为10，也可以变成其他字符串）
+  </script>
+</body>
+
+</html>
