@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    var arr = [{
+        'id': 1,
+        'name': '文章',
+        'parent_id': 0
+      },
+      {
+        'id': 2,
+        'name': '页面',
+        'parent_id': 0
+      },
+      {
+        'id': 3,
+        'name': '娱乐',
+        'parent_id': 1
+      },
+      {
+        'id': 4,
+        'name': '国内',
+        'parent_id': 1
+      },
+      {
+        'id': 5,
+        'name': '海外',
+        'parent_id': 1
+      },
+      {
+        'id': 6,
+        'name': '北京',
+        'parent_id': 4
+      },
+      {
+        'id': 7,
+        'name': '上海',
+        'parent_id': 4
+      }
+    ]
+
+    /**
+     * 将一维的扁平数组转换为多层级对象
+     * @param  {[type]} list 一维数组，数组中每一个元素需包含id和parent_id两个属性 
+     * @return {[type]} tree 多层级树状结构
+     */
+    function myTree(list) {
+      let obj = {}
+      let tree = []
+      for (let x in list) {
+        obj[list[x].id] = list[x]
+      }
+
+      for (let y in obj) {
+        if (obj[y].parent_id) {
+          if (!obj[obj[y].parent_id].children) {
+            obj[obj[y].parent_id].children = []
+          }
+          obj[obj[y].parent_id].children.push(obj[y])
+        } else {
+          tree.push(obj[y])
+        }
+      }
+      console.log(tree)
+      return tree
+    }
+
+    myTree(arr)
+
+
+
+    // function toTreeData(data, pid) {
+
+    //   function tree(id) {
+    //     let arr = []
+    //     var filterArr = data.filter(item => {
+    //       return item.parent_id === id;
+    //     })
+    //     if (filterArr.length) {
+    //       filterArr.forEach(item => {
+    //         var obj = {
+    //           id: item.id,
+    //           parent_id: item.parent_id,
+    //           name: item.name,
+    //           children: tree(item.id)
+    //         }
+    //         arr.push(obj)
+    //       })
+    //     }
+
+    //     return arr
+    //   }
+    //   return tree(pid) // 第一级节点的父id，是null或者0，视情况传入
+    // }
+    // console.log(toTreeData(arr, 0))
+  </script>
+</body>
+
+</html>
