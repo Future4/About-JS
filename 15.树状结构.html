@@ -73,7 +73,7 @@
       return tree
     }
 
-    myTree(arr)
+    var list = myTree(arr)
 
 
 
@@ -101,6 +101,16 @@
     //   return tree(pid) // 第一级节点的父id，是null或者0，视情况传入
     // }
     // console.log(toTreeData(arr, 0))
+      
+
+    // 把树状结构变成扁平化结构
+    function flatten(data) {
+      return data.reduce(
+        ( arr, {id,name,parent_id,children = []} ) =>
+        arr.concat([{id,name,parent_id}], flatten(children)), []);
+    }
+
+    console.log(flatten(list))
   </script>
 </body>
 
