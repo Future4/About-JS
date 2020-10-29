@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+
+        /**
+
+            WeakMap （垃圾回收机制，清空内存）
+
+            WeakMap vs Map
+            区别：
+            1.WeakMap的key必须是对象，不可以是原始值
+                weakMap.set('test','asd') //Error,因为test不是一个对象
+
+                let john = { name: "John" };
+
+                let weakMap = new WeakMap();
+                weakMap.set(john, "...");
+                john = null//覆盖引用
+                // john 被从内存中删除了！
+
+            2.WeakMap 不支持keys(),values(),entries()
+                weakMap不支持以上方法，所以没有办法获取weakmap的所有key活value
+
+                weakMap只有以下方法
+                weakMap.get()
+                weakMap.set()
+                weakMap.delete()
+                weakMap.has()
+
+        WeakMap使用场景：缓存
+            let cache = new WeakMap();
+            // 计算并记结果
+            function process(obj) {
+                if (!cache.has(obj)) {
+                    let result =  obj;
+
+                    cache.set(obj, result);
+                }
+
+                return cache.get(obj);
+            }
+
+            let obj = {};
+            //计算完成
+            let result1 = process(obj);
+            //获取缓存
+            let result2 = process(obj);
+            obj = null;
+
+
+
+
+
+
+
+
+
+            WeakSet
+            与 Set 类似，但是我们只能向 WeakSet 添加对象（而不能是原始值）。
+            跟 Set 一样，WeakSet 支持 add，has 和 delete 方法，但不支持 size 和 keys()，并且不可迭代。
+
+
+
+        **/
+    
+    </script>
+</body>
+
+</html>
