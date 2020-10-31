@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+
+        /*
+
+            当解构赋值对象的时候，
+            我们也可以使用已有的变量，而不用 let，但这里有一个陷阱。
+            let  title, width, height;
+            {title, width, height } = {{title: "Menu", width: 200, height: 100};}
+            问题在于 JavaScript 把主代码流（即不在其他表达式中）的 {...} 当做一个代码块。这样的代码块可以用于对语句分组
+
+            因此，这里 JavaScript 假定我们有一个代码块，这就是报错的原因。我们需要解构它。
+            为了告诉 JavaScript 这不是一个代码块，我们可以把整个赋值表达式用括号 (...) 包起来：
+            let title, width, height;
+            ({ title, width, height }) = { title: "Menu", width: 200, height: 100 };
+        */
+
+
+    </script>
+</body>
+
+</html>
