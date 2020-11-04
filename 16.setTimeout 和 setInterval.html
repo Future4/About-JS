@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        /*
+            let timerId = setTimeout(func|code, [delay], [arg1], [arg2], ...)
+            1.func|code
+            想要执行的函数或代码字符串。 一般传入的都是函数。由于某些历史原因，支持传入代码字符串，但是不建议这样做。
+            2.delay
+            执行前的延时，以毫秒为单位（1000 毫秒 = 1 秒），默认值是 0；
+            3.arg1，arg2…
+            要传入被执行函数（或代码字符串）的参数列表（IE9 以下不支持）
+
+            带参数的情况：
+            function sayHi(phrase, who) {
+                alert( phrase + ', ' + who );
+            }
+
+            setTimeout(sayHi, 1000, "Hello", "John"); // Hello, John
+
+            嵌套的 setTimeout
+            let timerId = setInterval(() => alert('tick'), 2000);
+
+            let timerId = setTimeout(function tick() {
+                alert('tick');
+                timerId = setTimeout(tick, 2000); // (*)
+            }, 2000);
+
+
+
+            function printNumbers(from, to) {
+            let current = from;
+            setTimeout(function go() {
+                alert(current);
+                    if (current < to) {
+                        setTimeout(go, 1000);
+                    }
+                    current++;
+                }, 1000);
+            }
+            // 用例：
+            printNumbers(5, 10);
+        */
+    </script>
+</body>
+
+</html>
