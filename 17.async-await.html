@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      /*
+            如何在js循环中使用async await
+    */
+      const numBasket = {
+        one: 'one',
+        two: 'two',
+        three: 'three',
+      }
+      const arr = ['one', 'two', 'three']
+
+      const sleep = (ms) => {
+        return new Promise((resolve) => setTimeout(resolve, ms))
+      }
+      const getNum = (num) => {
+        return sleep(1000).then((v) => numBasket[num])
+      }
+
+      //For循环中使用
+      //   const forLoop = async () => {
+      //     console.log('start')
+      //     for (let index = 0; index < arr.length; index++) {
+      //       const number = await getNum(arr[index])
+      //       console.log(number)
+      //     }
+      //     console.log('End')
+      //   }
+      //   forLoop()
+
+      //forEach中使用
+      //   const forEachLoop = (_) => {
+      //     console.log('Start')
+
+      //     arr.forEach(async (item) => {
+      //       const num = await getNum(item)
+      //       console.log(num)
+      //     })
+      //     console.log('End')
+      //   }
+      //   forEachLoop()
+      //打印如下代码
+      //   Start
+      //   End
+      //   one
+      //   two
+      //   three
+      //   JavaScript 中的 forEach不支持 promise 感知，也不支持 async 和await，所以不能在 forEach 使用 await 。
+
+      //map中使用
+      // const mapLoop = async (_) => {
+      //   console.log('Start')
+
+      //   //返回的总是promise
+      //   const promises = arr.map(async (item) => {
+      //     const num = await getNum(item)
+      //     return num
+      //   })
+
+      //   const nums = await Promise.all(promises)
+      //   console.log(nums)
+
+      //   console.log('End')
+      // }
+      // mapLoop()
+
+      //在filter中使用
+      //   const filterLoop = async (_) => {
+      //     console.log('Start')
+
+      //     const eqTwo = await arr.filter(async (item) => {
+      //       return item == 'tow'
+      //     })
+
+      //     console.log(eqTwo)
+      //     console.log('END')
+      //   }
+      //   filterLoop()
+      // 打印结果
+      //   Start
+      //   [('one', 'two', 'three')]
+      //   END
+      //当在filter 回调中使用await时，回调总是一个promise。由于promise 总是真的，数组中的所有项都通过filter
+
+      //正确使用三个步骤
+      //1、使用map返回一个promise 数组
+      //2、使用 await 等待处理结果
+      //3、使用 filter 对返回的结果进行处理
+      const filterLoop = async (_) => {
+        console.log('Start')
+
+        const promises = await arr.map(async (item) => {
+          return await getNum(item)
+        })
+
+        const nums = await Promise.all(promises)
+        const eqTwo = arr.filter((item, index) => {
+          return nums[index] == 'two'
+        })
+
+        console.log(nums, eqTwo)
+        console.log('END')
+      }
+      filterLoop()
+    </script>
+  </body>
+</html>
