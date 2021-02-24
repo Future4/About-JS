@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // WebWorker 特点
+      //1、javascript是单线程，使用new Worker() 可以创建一个新的线程，互不影响
+      //2、webworker 线程中，无法访问window和document
+      //3、只要message事件有可能触发，那么worker永远不会退出，直到没有回调函数和其他任务（下载、计时器）为止。
+
+      //API:
+
+      //主线程
+      //Worker.onerror：指定 error 事件的监听函数。
+      // Worker.onmessage：指定 message 事件的监听函数，发送过来的数据在Event.data属性中。
+      // Worker.onmessageerror：指定 messageerror 事件的监听函数。发送的数据无法序列化成字符串时，会触发这个事件。
+      // Worker.postMessage()：向 Worker 线程发送消息。
+      // Worker.terminate()：立即终止 Worker 线程。
+
+      //Worker 线程
+      // self.name： Worker 的名字。该属性只读，由构造函数指定。
+      // self.onmessage：指定message事件的监听函数。
+      // self.onmessageerror：指定 messageerror 事件的监听函数。发送的数据无法序列化成字符串时，会触发这个事件。
+      // self.close()：关闭 Worker 线程。
+      // self.postMessage()：向产生这个 Worker 线程发送消息。
+      // self.importScripts()：加载 JS 脚本。
+    </script>
+  </body>
+</html>
