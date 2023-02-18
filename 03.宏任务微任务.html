@@ -16,8 +16,13 @@
      * 
      * 接下来我们比较一下 setTimeout setInterval Promise  async await 的执行顺序吧～
      * 
+        宏任务：setTimeout setInterval
+       微任务：Promise.then  async await
+       同步任务:Promise里面的代码  
+       
+       同步任务》微任务》红任务
      */
-
+      
     /*
      * 下方注释为第一段的结果
      * 
