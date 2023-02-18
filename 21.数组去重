@@ -1,0 +1,15 @@
+    var arr = [1, 1, 'true', 'true', true, true, 15, 15, false, false, undefined, undefined, null, null, NaN, NaN, 'NaN', 0, 0, 'a', 'a', {}, {}];
+    // //利用Set
+    // function unique(arr) {
+    //     let res = [...new Set(arr)];
+    //     console.log(res);
+    // }
+
+    //利用hasOwnProperty
+    function unique(arr) {
+        var obj = {};
+        return arr.filter(function (item, index, arr) {
+            return obj.hasOwnProperty(typeof item + item) ? false : (obj[typeof item + item] = true)
+        })
+    }
+    unique(arr)
