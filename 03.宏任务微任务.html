@@ -17,7 +17,7 @@
      * 接下来我们比较一下 setTimeout setInterval Promise  async await 的执行顺序吧～
      * 
         宏任务：setTimeout setInterval
-       微任务：Promise.then  async await
+       微任务：Promise.then  async await   await会阻塞后面的任务加入到微任务中
        同步任务:Promise里面的代码  
        
        同步任务》微任务》红任务
